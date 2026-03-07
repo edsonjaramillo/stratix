@@ -39,8 +39,8 @@ class _CacheRequest:
     ticker: str
     multiplier: int
     timespan: Timespan
-    from_: str | int
-    to: str | int
+    start: str | int
+    end: str | int
     adjusted: bool
     sort: SortOrder
     limit: int
@@ -82,8 +82,8 @@ class _ResponseCache:
                 "ticker": request.ticker,
                 "multiplier": request.multiplier,
                 "timespan": request.timespan,
-                "from": request.from_,
-                "to": request.to,
+                "from": request.start,
+                "to": request.end,
                 "adjusted": request.adjusted,
                 "sort": request.sort,
                 "limit": request.limit,
@@ -94,7 +94,7 @@ class _ResponseCache:
         digest = hashlib.sha256(serialized_request.encode("utf-8")).hexdigest()[:16]
         filename = (
             f"{request.ticker}_{request.multiplier}_{request.timespan}_"
-            f"{request.from_}_{request.to}_{request.sort}_{request.limit}_"
+            f"{request.start}_{request.end}_{request.sort}_{request.limit}_"
             f"{'adjusted' if request.adjusted else 'raw'}_{digest}.json"
         )
         safe_filename = "".join(
@@ -244,8 +244,8 @@ class StockData:
         *,
         multiplier: int,
         timespan: Timespan,
-        from_: DateInput,
-        to: DateInput,
+        start: DateInput,
+        end: DateInput,
         adjusted: bool = True,
         sort: SortOrder = "asc",
         limit: int = 5_000,
@@ -257,14 +257,14 @@ class StockData:
             raise InvalidRequestError("Multiplier must be greater than or equal to 1.")
         if not 1 <= limit <= 50_000:
             raise InvalidRequestError("Limit must be between 1 and 50000.")
-        normalized_from = _normalize_date_input(from_)
-        normalized_to = _normalize_date_input(to)
+        normalized_start = _normalize_date_input(start)
+        normalized_end = _normalize_date_input(end)
         cache_request = _CacheRequest(
             ticker=normalized_ticker,
             multiplier=multiplier,
             timespan=timespan,
-            from_=normalized_from,
-            to=normalized_to,
+            start=normalized_start,
+            end=normalized_end,
             adjusted=adjusted,
             sort=sort,
             limit=limit,
@@ -276,7 +276,7 @@ class StockData:
 
         path = (
             f"/v2/aggs/ticker/{normalized_ticker}/range/"
-            f"{multiplier}/{timespan}/{normalized_from}/{normalized_to}"
+            f"{multiplier}/{timespan}/{normalized_start}/{normalized_end}"
         )
 
         try:
