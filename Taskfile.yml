@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  ENV_FILE_FLAG: --env-file=.env
+
+tasks:
+  default:
+    cmd: uv run {{.ENV_FILE_FLAG}} main.py
+    silent: true
