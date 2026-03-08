@@ -5,10 +5,12 @@ from src.indicators.base import (
     IndicatorSource,
     PreparedBar,
 )
+from src.indicators.bollinger_bands import BollingerBands
 from src.indicators.ema import EMA
 from src.indicators.sma import SMA
 
 __all__ = [
+    "BollingerBands",
     "EMA",
     "Indicator",
     "IndicatorPlacement",

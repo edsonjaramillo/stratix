@@ -2,10 +2,10 @@ from __future__ import annotations
 
 # pyright: reportUnknownMemberType=false
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Literal, Protocol
+from typing import Literal, Protocol, runtime_checkable
 
 from matplotlib.axes import Axes
 
@@ -45,6 +45,13 @@ class RenderedIndicatorPoint:
     x: float
     timestamp: datetime
     value: float
+
+
+@runtime_checkable
+class TooltipLinesProvider(Protocol):
+    def tooltip_lines(
+        self, bars: Sequence[PreparedBar]
+    ) -> Mapping[float, list[str]]: ...
 
 
 class Indicator(Protocol):
@@ -88,6 +95,20 @@ def collect_rendered_points(
         )
 
     return rendered_points
+
+
+def collect_tooltip_lines(
+    indicator: Indicator, bars: Sequence[PreparedBar]
+) -> dict[float, list[str]]:
+    if isinstance(indicator, TooltipLinesProvider):
+        return {x: list(labels) for x, labels in indicator.tooltip_lines(bars).items()}
+
+    tooltip_lines: dict[float, list[str]] = {}
+    for point in collect_rendered_points(indicator, bars):
+        labels = tooltip_lines.setdefault(point.x, [])
+        labels.append(f"{indicator.label}: {point.value:.2f}")
+
+    return tooltip_lines
 
 
 def draw_line_indicator(

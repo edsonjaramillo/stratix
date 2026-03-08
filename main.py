@@ -1,11 +1,12 @@
 from src.chart import Chart
 from src.colors import Colors
-from src.indicators import EMA
+from src.indicators import BollingerBands, SMA
 from src.stock_data import StockData, Timespan
+
 
 ticker = "AAPL"
 timespan: Timespan = "day"
-start = "2025-01-01"
+start = "2024-01-01"
 end = "2025-12-31"
 
 
@@ -23,10 +24,10 @@ def main() -> None:
         data,
         show_volume=True,
         indicators=[
-            EMA(window=9, color=Colors.CYAN),
-            EMA(window=21, color=Colors.YELLOW),
-            EMA(window=50, color=Colors.ORANGE),
-            EMA(window=200, color=Colors.RED),
+            BollingerBands(),
+            SMA(window=50, color=Colors.YELLOW),
+            SMA(window=100, color=Colors.ORANGE),
+            SMA(window=200, color=Colors.RED),
         ],
     ).show()
 
