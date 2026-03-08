@@ -8,6 +8,7 @@ from src.indicators.base import (
 from src.indicators.bollinger_bands import BollingerBands
 from src.indicators.ema import EMA
 from src.indicators.sma import SMA
+from src.indicators.vwap import VWAP
 
 __all__ = [
     "BollingerBands",
@@ -18,4 +19,5 @@ __all__ = [
     "IndicatorSource",
     "PreparedBar",
     "SMA",
+    "VWAP",
 ]

@@ -1,6 +1,6 @@
 from src.chart import Chart
 from src.colors import Colors
-from src.indicators import BollingerBands, SMA
+from src.indicators import EMA, VWAP
 from src.stock_data import StockData, Timespan
 
 
@@ -24,10 +24,9 @@ def main() -> None:
         data,
         show_volume=True,
         indicators=[
-            BollingerBands(),
-            SMA(window=50, color=Colors.YELLOW),
-            SMA(window=100, color=Colors.ORANGE),
-            SMA(window=200, color=Colors.RED),
+            EMA(window=8, color=Colors.FUCHSIA),
+            EMA(window=20, color=Colors.CYAN),
+            VWAP(color=Colors.AMBER),
         ],
     ).show()
 
