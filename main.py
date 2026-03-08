@@ -1,7 +1,7 @@
 from src.chart import Chart
-from src.indicators import SMA
-from src.stock_data import StockData, Timespan
 from src.colors import Colors
+from src.indicators import EMA
+from src.stock_data import StockData, Timespan
 
 ticker = "AAPL"
 timespan: Timespan = "day"
@@ -23,10 +23,10 @@ def main() -> None:
         data,
         show_volume=True,
         indicators=[
-            SMA(window=20, color=Colors.CYAN),
-            SMA(window=50, color=Colors.YELLOW),
-            SMA(window=100, color=Colors.ORANGE),
-            SMA(window=200, color=Colors.RED),
+            EMA(window=9, color=Colors.CYAN),
+            EMA(window=21, color=Colors.YELLOW),
+            EMA(window=50, color=Colors.ORANGE),
+            EMA(window=200, color=Colors.RED),
         ],
     ).show()
 
